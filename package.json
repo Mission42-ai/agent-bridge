@@ -1,0 +1,28 @@
+{
+  "name": "@mission42/agent-bridge",
+  "version": "2.0.0",
+  "description": "Generic agent executor — Pusher-triggered queue for Claude Agent SDK",
+  "type": "module",
+  "main": "dist/transport.js",
+  "files": ["dist/", ".env.example"],
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "dev": "tsx src/transport.ts",
+    "build": "tsc",
+    "start": "node dist/transport.js",
+    "bridge:restart": "./scripts/bridge-restart.sh",
+    "bridge:logs": "./scripts/bridge-logs.sh"
+  },
+  "dependencies": {
+    "@anthropic-ai/claude-agent-sdk": "latest",
+    "dotenv": "^17.2.4",
+    "pusher-js": "^8.4.0"
+  },
+  "devDependencies": {
+    "@types/node": "^25.2.2",
+    "tsx": "^4.21.0",
+    "typescript": "^5.9.3"
+  }
+}

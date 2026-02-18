@@ -1,0 +1,15 @@
+services:
+  bridge:
+    build: .
+    env_file: .env.local
+    volumes:
+      - ./overlays:/app/overlays:ro
+      - bridge-data:/tmp/agent-bridge
+    restart: unless-stopped
+    environment:
+      - ANTHROPIC_API_KEY=${ANTHROPIC_API_KEY}
+      - BRIDGE_BASE_DIR=/tmp/agent-bridge
+      - BRIDGE_OVERLAYS_DIR=/app/overlays
+
+volumes:
+  bridge-data:
