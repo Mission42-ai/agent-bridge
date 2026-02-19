@@ -44,6 +44,10 @@ export interface BridgeConfig {
   defaultModel: string | undefined;
   systemPromptSuffix: string;
   nonInteractiveDisallowed: string[];
+  httpPort: number;
+  httpHost: string;
+  httpBearerToken: string | undefined;
+  httpNoAuth: boolean;
 }
 
 export function loadBridgeConfig(): BridgeConfig {
@@ -62,6 +66,10 @@ export function loadBridgeConfig(): BridgeConfig {
     defaultModel: envCached("BRIDGE_DEFAULT_MODEL"),
     systemPromptSuffix: envCached("BRIDGE_SYSTEM_PROMPT_SUFFIX", "")!,
     nonInteractiveDisallowed: ["AskUserQuestion"],
+    httpPort: envCachedNumber("BRIDGE_HTTP_PORT", 3099),
+    httpHost: envCached("BRIDGE_HTTP_HOST", "127.0.0.1")!,
+    httpBearerToken: envCached("BRIDGE_HTTP_BEARER_TOKEN"),
+    httpNoAuth: envCached("BRIDGE_HTTP_NO_AUTH") === "true",
   };
 }
 

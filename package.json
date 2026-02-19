@@ -3,15 +3,15 @@
   "version": "2.0.0",
   "description": "Generic agent executor — Pusher-triggered queue for Claude Agent SDK",
   "type": "module",
-  "main": "dist/transport.js",
+  "main": "dist/index.js",
   "files": ["dist/", ".env.example"],
   "engines": {
     "node": ">=20"
   },
   "scripts": {
-    "dev": "tsx src/transport.ts",
+    "dev": "tsx src/index.ts",
     "build": "tsc",
-    "start": "node dist/transport.js",
+    "start": "node dist/index.js",
     "bridge:restart": "./scripts/bridge-restart.sh",
     "bridge:logs": "./scripts/bridge-logs.sh"
   },
