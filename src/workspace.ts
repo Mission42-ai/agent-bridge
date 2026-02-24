@@ -146,9 +146,13 @@ export async function setupWorkspace(
       injectOverlays(wt.worktreePath, workspace.repo, config.overlaysDir);
     }
 
-    // Configure git identity
-    await exec(`git config user.name "Agent Bridge"`, { cwd: wt.worktreePath });
-    await exec(`git config user.email "bridge@agent-bridge.local"`, { cwd: wt.worktreePath });
+    // Configure git identity (per-repo)
+    const slug = repoSlug(workspace.repo);
+    const isAcrHub = slug.toLowerCase().includes("altacarn") || slug.toLowerCase().includes("acr-hub");
+    const gitName = isAcrHub ? "Koni" : "Jarvis";
+    const gitEmail = isAcrHub ? "konstantin@mission42.ai" : "jarvis@mission42.ai";
+    await exec(`git config user.name "${gitName}"`, { cwd: wt.worktreePath });
+    await exec(`git config user.email "${gitEmail}"`, { cwd: wt.worktreePath });
 
     return { cwd: wt.worktreePath, cleanup: wt.cleanup };
   }

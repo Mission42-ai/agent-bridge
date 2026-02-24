@@ -15,12 +15,23 @@ export async function executeRequest(request: ExecutionRequest): Promise<void> {
   let cleanup: (() => Promise<void>) | undefined;
   let cwd = process.cwd();
 
+  // Inject default callback if none specified
+  if (!request.callbackUrl && config.defaultCallbackUrl) {
+    request.callbackUrl = config.defaultCallbackUrl;
+    if (config.defaultCallbackToken && !request.callbackHeaders?.["Authorization"]) {
+      request.callbackHeaders = {
+        ...request.callbackHeaders,
+        "Authorization": `Bearer ${config.defaultCallbackToken}`,
+      };
+    }
+  }
+
   // Guard: reject empty prompts immediately
   if (!request.prompt || request.prompt.trim() === "") {
     const errorMsg = `Empty prompt received for request ${request.id}`;
     console.error(`[Bridge] ${errorMsg}`);
     if (request.callbackUrl) {
-      await sendCallback(request.callbackUrl, buildErrorPayload(request, errorMsg, startMs));
+      await sendCallback(request.callbackUrl, buildErrorPayload(request, errorMsg, startMs), request.callbackHeaders);
     }
     return;
   }
@@ -137,7 +148,7 @@ export async function executeRequest(request: ExecutionRequest): Promise<void> {
         hasMetadata: !!payload.metadata,
         metadataKeys: payload.metadata ? Object.keys(payload.metadata) : [],
       }));
-      await sendCallback(request.callbackUrl, payload);
+      await sendCallback(request.callbackUrl, payload, request.callbackHeaders);
     }
   } catch (err) {
     const durationMs = Date.now() - startMs;
@@ -145,7 +156,7 @@ export async function executeRequest(request: ExecutionRequest): Promise<void> {
     console.error(`[Bridge] Error: ${errorMsg}`);
 
     if (request.callbackUrl) {
-      await sendCallback(request.callbackUrl, buildErrorPayload(request, errorMsg, startMs));
+      await sendCallback(request.callbackUrl, buildErrorPayload(request, errorMsg, startMs), request.callbackHeaders);
     }
   } finally {
     await cleanup?.();

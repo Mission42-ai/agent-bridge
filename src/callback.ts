@@ -3,6 +3,7 @@ import type { CallbackPayload } from "./types.js";
 export async function sendCallback(
   url: string,
   payload: CallbackPayload,
+  extraHeaders?: Record<string, string>,
 ): Promise<void> {
   try {
     const controller = new AbortController();
@@ -10,7 +11,7 @@ export async function sendCallback(
 
     const response = await fetch(url, {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
+      headers: { "Content-Type": "application/json", ...extraHeaders },
       body: JSON.stringify(payload),
       signal: controller.signal,
     });

@@ -48,6 +48,8 @@ export interface BridgeConfig {
   httpHost: string;
   httpBearerToken: string | undefined;
   httpNoAuth: boolean;
+  defaultCallbackUrl: string | undefined;
+  defaultCallbackToken: string | undefined;
 }
 
 export function loadBridgeConfig(): BridgeConfig {
@@ -70,6 +72,8 @@ export function loadBridgeConfig(): BridgeConfig {
     httpHost: envCached("BRIDGE_HTTP_HOST", "127.0.0.1")!,
     httpBearerToken: envCached("BRIDGE_HTTP_BEARER_TOKEN"),
     httpNoAuth: envCached("BRIDGE_HTTP_NO_AUTH") === "true",
+    defaultCallbackUrl: envCached("BRIDGE_DEFAULT_CALLBACK_URL"),
+    defaultCallbackToken: envCached("BRIDGE_DEFAULT_CALLBACK_TOKEN"),
   };
 }
 

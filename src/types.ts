@@ -57,6 +57,7 @@ export interface ExecutionRequest {
   id: string;
   prompt: string;
   callbackUrl?: string;
+  callbackHeaders?: Record<string, string>;
   workspace?: Workspace;
   agent?: AgentConfig;
   metadata?: Record<string, unknown>;
